@@ -318,45 +318,51 @@ class _ProductItemValue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-            children: [
-              Expanded(
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                width: 1.0,
-                height: 40.0,
-                color: Theme.of(context).dividerColor,
-              ),
-              Expanded(
-                child: Text(
-                  percent,
-                  textAlign: TextAlign.center,
+                Container(
+                  width: 1.0,
+                  height: 40.0,
+                  color: Theme.of(context).dividerColor,
                 ),
-              ),
-              Container(
-                width: 1.0,
-                height: 40.0,
-                color: Theme.of(context).dividerColor,
-              ),
-              Expanded(
-                child: Text(
-                  value,
-                  textAlign: TextAlign.center,
+                Expanded(
+                  child: Text(
+                    percent,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        if (includeDivider) const Divider(height: 1.0)
-      ],
+                Container(
+                  width: 1.0,
+                  height: 40.0,
+                  color: Theme.of(context).dividerColor,
+                ),
+                Expanded(
+                  child: Text(
+                    value,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+      ),
+            if (includeDivider) const Divider(height: 1.0)
+          ],
+        ),
     );
   }
 }

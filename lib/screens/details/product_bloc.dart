@@ -1,6 +1,9 @@
 // Event
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_yuka_like/model/product.dart';
+import 'package:flutter_yuka_like/screens/details/request.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
 
 abstract class ProductEvent {
   const ProductEvent();
@@ -39,40 +42,45 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   ProductBloc() : super(const LoadingProductState()) {
     on<LoadProductEvent>(_onLoadProduct);
   }
-
   Future<void> _onLoadProduct(handler, emitter) async {
     emitter(const LoadingProductState());
 
-    // TODO Faire de la requête
+    Request request = Request();
+    Product product = await request.apiRequest();
     await Future.delayed(const Duration(seconds: 5));
 
     emitter(
       LoadedProductState(
         Product(
-          barcode: '123456789',
-          name: 'Petits pois et carottes',
-          brands: ['Cassegrain'],
-          altName: 'Petits pois & carottes à l\'étuvée avec garniture',
-          nutriScore: ProductNutriscore.A,
-          novaScore: ProductNovaScore.Group1,
-          ecoScore: ProductEcoScore.D,
-          quantity: '200g (égoutté 130g)',
-          manufacturingCountries: ['France'],
-          picture:
-              'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1610&q=80',
+          barcode: product.barcode,
+          name: product.name,
+          brands: product.brands,
+          altName: product.altName,
+          nutriScore: product.nutriScore,
+          novaScore: product.novaScore,
+          ecoScore: product.ecoScore,
+          quantity: product.quantity,
+          manufacturingCountries: product.manufacturingCountries,
+          picture: product.picture,
+          ingredients: product.ingredients,
+          nutrientLevels:NutrientLevels(
+              fat: product.nutrientLevels?.fat,
+              saturatedFat: product.nutrientLevels?.saturatedFat,
+              sugars: product.nutrientLevels?.sugars,
+              salt: product.nutrientLevels?.salt),
           nutritionFacts:
             NutritionFacts(
-              servingSize: 'nc',
-              calories: Nutriment(unit: 'kj',perServing: '?',per100g: 293),
-              fat: Nutriment(unit: 'g',perServing: '?',per100g: 0.8),
-              saturatedFat: Nutriment(unit: 'g',perServing: '?',per100g: 0.1),
-              carbohydrate: Nutriment(unit: 'g',perServing: '?',per100g: 8.4),
-              sugar: Nutriment(unit: 'g',perServing: '?',per100g: 5.2),
-              fiber: Nutriment(unit: 'g',perServing: '?',per100g: 5.2),
-              proteins: Nutriment(unit: 'g',perServing: '?',per100g: 4.2),
-              sodium: Nutriment(unit: 'g',perServing: '?',per100g: 0.295),
-              salt: Nutriment(unit: 'g',perServing: '?',per100g: 0.75),
-              energy: Nutriment(unit: 'kj',perServing: '?',per100g: 293),
+              servingSize: product.nutritionFacts!.servingSize,
+              calories: product.nutritionFacts?.calories,
+              fat:Nutriment(unit:product.nutritionFacts!.fat!.unit,perServing:product.nutritionFacts!.fat!.perServing,per100g:product.nutritionFacts!.fat!.per100g),
+              saturatedFat:Nutriment(unit:product.nutritionFacts!.saturatedFat!.unit,perServing:product.nutritionFacts!.saturatedFat!.perServing,per100g:product.nutritionFacts!.saturatedFat!.per100g),
+              carbohydrate:Nutriment(unit:product.nutritionFacts!.carbohydrate!.unit,perServing:product.nutritionFacts!.carbohydrate!.perServing,per100g:product.nutritionFacts!.carbohydrate!.per100g),
+              sugar:Nutriment(unit:product.nutritionFacts!.sugar!.unit,perServing:product.nutritionFacts!.sugar!.perServing,per100g:product.nutritionFacts!.sugar!.per100g),
+              fiber:Nutriment(unit:product.nutritionFacts!.fiber!.unit,perServing:product.nutritionFacts!.fiber!.perServing,per100g:product.nutritionFacts!.fiber!.per100g),
+              proteins:Nutriment(unit:product.nutritionFacts!.proteins!.unit,perServing:product.nutritionFacts!.proteins!.perServing,per100g:product.nutritionFacts!.proteins!.per100g),
+              sodium:Nutriment(unit:product.nutritionFacts!.sodium!.unit,perServing:product.nutritionFacts!.sodium!.perServing,per100g:product.nutritionFacts!.sodium!.per100g),
+              salt:Nutriment(unit:product.nutritionFacts!.salt!.unit,perServing:product.nutritionFacts!.salt!.perServing,per100g:product.nutritionFacts!.salt!.per100g),
+              energy:Nutriment(unit:product.nutritionFacts!.energy!.unit,perServing:product.nutritionFacts!.energy!.perServing,per100g:product.nutritionFacts!.energy!.per100g)
               ),
             ),
         ),

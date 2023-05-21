@@ -242,29 +242,29 @@ class _Info extends StatelessWidget {
                 _ProductItemValue(
                   label: 'Matières grasses / lipides',
                   value: '${product.nutritionFacts!.fat!.per100g} ${product.nutritionFacts!.fat!.unit}',
-                  quality: 'Faible quantité',
+                  quality: '${product.nutrientLevels!.fat}',
                 ),
               if (product.nutritionFacts?.saturatedFat != null)
                 _ProductItemValue(
                   label: 'Acides gras saturés',
                   value: '${product.nutritionFacts!.saturatedFat!.per100g} ${product.nutritionFacts!.saturatedFat!.unit}',
-                  quality: 'Faible quantité',
+                  quality: '${product.nutrientLevels!.saturatedFat}',
                 ),
               if (product.nutritionFacts?.sugar != null)
                 _ProductItemValue(
                   label: 'Sucres',
                   value: '${product.nutritionFacts!.sugar!.per100g} ${product.nutritionFacts!.sugar!.unit}',
-                  quality: 'Quantitée modérée',
+                  quality: '${product.nutrientLevels!.sugars}',
                 ),
               if (product.nutritionFacts?.salt != null)
                 _ProductItemValue(
                   label: 'Sel',
                   value: '${product.nutritionFacts!.salt!.per100g} ${product.nutritionFacts!.salt!.unit}',
-                  quality: 'Quantité élevée',
+                  quality: '${product.nutrientLevels!.salt}',
                   includeDivider: false,
                 ),
               SizedBox(
-                height: 15.0,
+                height: 10.0,
               ),
             ],
           );
@@ -309,11 +309,31 @@ class _ProductItemValue extends StatelessWidget {
             ),
           ],
         ),
-        Text(
-          quality,
-          textAlign: TextAlign.end,
+        Row(
+          children: [
+            Spacer(),
+            if(quality == "low")
+              const Text('Faible quantité',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  color: Colors.green)
+              ),
+            if (quality == "moderate")
+              const Text('Quantité modérée',
+              textAlign: TextAlign.end,
+                style: TextStyle(
+                  color: Colors.orange)
+              ),
+            if(quality == "high")
+              const Text('Quantité élevée',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  color: Colors.red)
+              ),
+          ],
         ),
         if (includeDivider) const Divider(height: 1.0)
+
       ],
     );
   }
